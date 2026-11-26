@@ -134,16 +134,23 @@ fbq('track', 'PageView');
     interacted = true; update();
   }
 
+  // Fire Lead once per session; save the flag only AFTER fbq is called
   function fireLead(){
-    try {
-      if (sessionStorage.getItem('lead_fired')) return;
-      sessionStorage.setItem('lead_fired', '1');
-    } catch (err) {
-      if (leadSent) return;
-    }
     if (leadSent) return;
+    try { if (sessionStorage.getItem('lead_fired')) { leadSent = true; return; } } catch (err) {}
     leadSent = true;
-    try { fbq('track', 'Lead'); } catch (err) {}
+    try { fbq('track', 'Lead'); } catch (err) { leadSent = false; return; }
+    try { sessionStorage.setItem('lead_fired', '1'); } catch (err) {}
+  }
+
+  // Wait until the pixel library has loaded (max 2s), then give the request time to leave
+  function goWhenSent(){
+    var waited = 0;
+    (function check(){
+      if ((window.fbq && fbq.callMethod) || waited >= 2000) {
+        setTimeout(function(){ window.location.href = LINK; }, 400);
+      } else { waited += 100; setTimeout(check, 100); }
+    })();
   }
 
   setLabel('PLEASE WAIT...');
@@ -165,7 +172,7 @@ fbq('track', 'PageView');
       if (!e.isTrusted || !unlocked || isBot || busy) return;
       busy = true;
       fireLead();
-      setTimeout(function(){ window.location.href = LINK; }, 250);
+      goWhenSent();
     });
   }
 })();
