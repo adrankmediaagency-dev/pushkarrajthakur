@@ -17,7 +17,6 @@ body{font-family:Arial,"Segoe UI",sans-serif;background:var(--bg);color:var(--te
 .avatar img{width:100%;height:100%;object-fit:cover;display:block}
 h1{font-size:21px;font-weight:800}
 .btn{display:block;width:100%;margin:18px auto;background:var(--blue);color:#fff;padding:16px 10px;border-radius:11px;text-decoration:none;font-weight:bold;font-size:15px}
-.btn.locked{background:#9aa1ae;color:#fff;cursor:not-allowed;pointer-events:none;user-select:none;-webkit-user-select:none}
 .feature{background:var(--card);border:1px solid var(--border);padding:12px;margin:8px 0;border-radius:10px;text-align:left;display:flex;gap:10px;align-items:flex-start;font-size:13px}
 .icon{font-size:18px}
 .feature b{display:block;margin-bottom:2px}
@@ -51,7 +50,7 @@ src="https://www.facebook.com/tr?id=1160571123104458&ev=PageView&noscript=1"
   </div>
   <h1>Pushkar Raj Thakur</h1>
 
-  <a class="btn locked" data-tg role="button" aria-disabled="true">Join the Telegram Channel</a>
+  <a class="btn" href="https://telegram.me/+RJ5_sy5mIrxiZmRl">Join the Telegram Channel</a>
 
   <div class="feature">
     <div class="icon">📊</div>
@@ -68,7 +67,7 @@ src="https://www.facebook.com/tr?id=1160571123104458&ev=PageView&noscript=1"
     <div><b>Risk awareness</b><span>Reminders on position sizing and managing losses.</span></div>
   </div>
 
-  <a class="btn locked" data-tg role="button" aria-disabled="true">Join the Telegram Channel</a>
+  <a class="btn" href="https://telegram.me/+RJ5_sy5mIrxiZmRl">Join the Telegram Channel</a>
 
   <div class="disclaimer">
     <p><strong>Disclaimer:</strong> Investments in securities markets, including derivatives, are subject to market risk and you can lose money. Past performance does not indicate future results. Content on this channel is for educational purposes only and is not personalised investment advice. Please consult a SEBI-registered investment adviser before making financial decisions.</p>
@@ -93,89 +92,5 @@ fbq('track', 'PageView');
 </script>
 <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1650159226805801&ev=PageView&noscript=1" alt=""/></noscript>
 <!-- End Meta Pixel Code -->
-
-<script>
-(function(){
-  var LINK = 'https://telegram.me/+RJ5_sy5mIrxiZmRl';
-  var btns = document.querySelectorAll('a[data-tg]');
-  var LABEL = btns.length ? btns[0].textContent : 'Join the Telegram Channel';
-  var ua = navigator.userAgent || '';
-
-  // Bot / headless detection
-  var isBot = navigator.webdriver === true ||
-    /HeadlessChrome|PhantomJS|Googlebot|bingbot|AdsBot|Mediapartners|facebookexternalhit|Facebot|Lighthouse|Pingdom|python-requests|curl\/|wget|selenium|puppeteer|playwright|Scrapy|crawler|spider|\bbot\b/i.test(ua) ||
-    !!(window.callPhantom || window._phantom || window.__nightmare || window.domAutomation || window.domAutomationController) ||
-    document.documentElement.hasAttribute('webdriver');
-
-  var timeOk = false, interacted = false, unlocked = false, moves = 0, busy = false, leadSent = false;
-
-  function setLabel(t){ for (var i = 0; i < btns.length; i++) btns[i].textContent = t; }
-
-  function unlock(){
-    unlocked = true;
-    for (var i = 0; i < btns.length; i++){
-      btns[i].classList.remove('locked');
-      btns[i].removeAttribute('aria-disabled');
-      btns[i].textContent = LABEL;
-      btns[i].setAttribute('href', LINK);
-      btns[i].setAttribute('rel', 'noopener');
-    }
-  }
-
-  function update(){
-    if (isBot || unlocked) return;
-    if (!timeOk) setLabel('PLEASE WAIT...');
-    else if (!interacted) setLabel('SCROLL OR TAP TO CONTINUE');
-    else unlock();
-  }
-
-  function mark(e){
-    if (e && e.isTrusted === false) return;
-    interacted = true; update();
-  }
-
-  // Fire Lead once per session; save the flag only AFTER fbq is called
-  function fireLead(){
-    if (leadSent) return;
-    try { if (sessionStorage.getItem('lead_fired')) { leadSent = true; return; } } catch (err) {}
-    leadSent = true;
-    try { fbq('track', 'Lead'); } catch (err) { leadSent = false; return; }
-    try { sessionStorage.setItem('lead_fired', '1'); } catch (err) {}
-  }
-
-  // Wait until the pixel library has loaded (max 2s), then give the request time to leave
-  function goWhenSent(){
-    var waited = 0;
-    (function check(){
-      if ((window.fbq && fbq.callMethod) || waited >= 2000) {
-        setTimeout(function(){ window.location.href = LINK; }, 400);
-      } else { waited += 100; setTimeout(check, 100); }
-    })();
-  }
-
-  setLabel('PLEASE WAIT...');
-  if (isBot) return;
-
-  ['touchstart', 'keydown', 'scroll', 'wheel'].forEach(function(ev){
-    window.addEventListener(ev, mark, {passive: true});
-  });
-  window.addEventListener('mousemove', function(e){
-    if (!e.isTrusted) return;
-    if (++moves > 5) mark(e);
-  }, {passive: true});
-
-  setTimeout(function(){ timeOk = true; update(); }, 3000);
-
-  for (var i = 0; i < btns.length; i++){
-    btns[i].addEventListener('click', function(e){
-      e.preventDefault();
-      if (!e.isTrusted || !unlocked || isBot || busy) return;
-      busy = true;
-      fireLead();
-      goWhenSent();
-    });
-  }
-})();
-</script>
 </body>
 </html>
